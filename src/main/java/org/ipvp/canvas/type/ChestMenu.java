@@ -23,6 +23,7 @@
 
 package org.ipvp.canvas.type;
 
+import net.kyori.adventure.text.Component;
 import org.ipvp.canvas.Menu;
 
 /**
@@ -30,7 +31,7 @@ import org.ipvp.canvas.Menu;
  */
 public class ChestMenu extends AbstractMenu {
 
-    protected ChestMenu(String title, int slots, Menu menu, boolean redraw) {
+    protected ChestMenu(Component title, int slots, Menu menu, boolean redraw) {
         super(title, slots, menu, redraw);
     }
 

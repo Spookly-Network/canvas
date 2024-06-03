@@ -27,6 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.inventory.InventoryAction;
@@ -272,7 +273,7 @@ public interface Menu extends Iterable<Slot> {
          * @param title The title to display
          * @return Fluent pattern
          */
-        T title(String title);
+        T title(Component title);
 
         /**
          * Adds a fallback parent to this Menu
