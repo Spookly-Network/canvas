@@ -23,6 +23,7 @@
 
 package org.ipvp.canvas.slot;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,6 +47,8 @@ public class DefaultSlot implements Slot {
     private ItemStackTemplate item;
     private ClickOptions options;
     private ClickHandler handler;
+
+    private List<String> arguments;
     
     public DefaultSlot(AbstractMenu handle, int index) {
         this(handle, index, ClickOptions.DENY_ALL);
@@ -142,7 +145,7 @@ public class DefaultSlot implements Slot {
 
     @Override
     public SlotSettings getSettings() {
-        return new SlotSettings(options, handler, item);
+        return new SlotSettings(options, handler, item, arguments);
     }
 
     @Override
@@ -152,5 +155,16 @@ public class DefaultSlot implements Slot {
         if (settings.getClickOptions() != null) {
             setClickOptions(settings.getClickOptions());
         }
+        if (settings.getItemArguments() != null && (!settings.getItemArguments().isEmpty())) {
+            setArguments(settings.getItemArguments());
+        }
+    }
+
+    public List<String> getArguments() {
+        return arguments;
+    }
+
+    public void setArguments(List<String> arguments) {
+        this.arguments = arguments;
     }
 }

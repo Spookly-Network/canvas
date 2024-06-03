@@ -23,7 +23,11 @@
 
 package org.ipvp.canvas.slot;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.ipvp.canvas.template.ItemStackTemplate;
@@ -37,11 +41,13 @@ public class SlotSettings {
     private ClickOptions clickOptions;
     private Slot.ClickHandler clickHandler;
     private ItemStackTemplate itemTemplate;
+    private List<String> itemArguments;
 
-    SlotSettings(ClickOptions clickOptions, Slot.ClickHandler clickHandler, ItemStackTemplate itemTemplate) {
+    SlotSettings(ClickOptions clickOptions, Slot.ClickHandler clickHandler, ItemStackTemplate itemTemplate, List<String> itemArguments) {
         this.clickOptions = clickOptions;
         this.clickHandler = clickHandler;
         this.itemTemplate = itemTemplate;
+        this.itemArguments = itemArguments;
     }
 
     /**
@@ -65,6 +71,14 @@ public class SlotSettings {
         return itemTemplate;
     }
 
+
+    /**
+     * @see Slot#getArguments()
+     */
+    public List<String> getItemArguments() {
+        return itemArguments;
+    }
+
     /**
      * Returns a new builder.
      *
@@ -82,6 +96,7 @@ public class SlotSettings {
         private ClickOptions clickOptions;
         private Slot.ClickHandler clickHandler;
         private ItemStackTemplate itemTemplate;
+        private List<String> itemArguments;
 
         private Builder() {
 
@@ -100,6 +115,16 @@ public class SlotSettings {
          */
         public Builder clickHandler(Slot.ClickHandler clickHandler) {
             this.clickHandler = clickHandler;
+            return this;
+        }
+
+        /**
+         * Adds Arguments for slot handler
+         * @param arguments
+         * @return Builder
+         */
+        public Builder arguments(String... arguments) {
+            this.itemArguments = Arrays.stream(arguments).collect(Collectors.toList());
             return this;
         }
 
@@ -131,7 +156,7 @@ public class SlotSettings {
          * @return slot details
          */
         public SlotSettings build() {
-            return new SlotSettings(clickOptions, clickHandler, itemTemplate);
+            return new SlotSettings(clickOptions, clickHandler, itemTemplate, itemArguments);
         }
     }
 }

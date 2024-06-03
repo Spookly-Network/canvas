@@ -23,6 +23,7 @@
 
 package org.ipvp.canvas.slot;
 
+import java.util.List;
 import java.util.function.Supplier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -156,6 +157,22 @@ public interface Slot {
      * @param settings slot settings
      */
     void setSettings(SlotSettings settings);
+
+    /**
+     * Returns a list of strings that the user can define. It can be used
+     * to reuse the same handler so that code gets cleaner.
+     *
+     * @return List of arguments
+     */
+    List<String> getArguments();
+
+    /**
+     * Sets the argument list wich can be used in
+     * the click handler
+     *
+     * @param arguments List of arguments
+     */
+    void setArguments(List<String> arguments);
 
     /**
      * A Slots click handler is a user defined function or policy that occurs when a
