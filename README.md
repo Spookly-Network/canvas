@@ -1,4 +1,11 @@
-# canvas [![Build Status](https://travis-ci.org/IPVP-MC/canvas.svg?branch=master)](https://travis-ci.org/IPVP-MC/canvas)
+# canvas 
+> [!IMPORTANT]  
+> This is a fork of another repository, we have just customized it to our needs.
+> So please for any bugfixes, other contributions or props please see the original repo.
+> 
+> Link to original: [https://github.com/IPVP-MC/canvas](https://github.com/IPVP-MC/canvas)
+
+
 
 A highly advanced and effective inventory management library for Bukkit plugins. The primary goal of canvas is to enable creation of elegant inventory systems without the quirks of existing libraries.
 

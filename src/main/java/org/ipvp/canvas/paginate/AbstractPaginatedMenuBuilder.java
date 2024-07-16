@@ -30,6 +30,7 @@ import org.ipvp.canvas.slot.Slot;
 import org.ipvp.canvas.template.ItemStackTemplate;
 import org.ipvp.canvas.template.StaticItemTemplate;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,8 +44,8 @@ public abstract class AbstractPaginatedMenuBuilder<T extends AbstractPaginatedMe
 
     private final Menu.Builder<?> pageBuilder;
     private final List<Consumer<Menu>> newMenuModifiers;
-    private int previousButtonSlot = -1;
-    private int nextButtonSlot = -1;
+    private List<Integer> previousButtonSlot = List.of(-1);
+    private List<Integer> nextButtonSlot = List.of(-1);
     private ItemStackTemplate previousButton;
     private ItemStackTemplate previousButtonEmpty;
     private ItemStackTemplate nextButton;
@@ -98,22 +99,46 @@ public abstract class AbstractPaginatedMenuBuilder<T extends AbstractPaginatedMe
     }
 
     /**
+     * @deprecated use {@link #getPreviousButtonSlots()} instead
      * Gets the slot index for the previous page button.
      *
      * @return previous page slot index
      */
+    @Deprecated
     public int getPreviousButtonSlot() {
+        return previousButtonSlot.getFirst();
+    }
+
+    /**
+     * Gets the slot index for the previous page button.
+     *
+     * @return previous page slot index
+     */
+    public List<Integer> getPreviousButtonSlots() {
         return previousButtonSlot;
     }
 
     /**
+     * @deprecated use {@link #previousButtonSlots(Integer...)} instead
      * Sets the slot index for the previous page button.
      *
      * @param previousButtonSlot slot index
      * @return fluent pattern
      */
+    @Deprecated
     public T previousButtonSlot(int previousButtonSlot) {
-        this.previousButtonSlot = previousButtonSlot;
+        this.previousButtonSlot = new ArrayList<>(previousButtonSlot);
+        return (T) this;
+    }
+
+    /**
+     * Sets the slot index for the previous page button.
+     *
+     * @param previousButtonSlots slot index
+     * @return fluent pattern
+     */
+    public T previousButtonSlots(Integer... previousButtonSlots) {
+        this.previousButtonSlot = List.of(previousButtonSlots);
         return (T) this;
     }
 
@@ -130,24 +155,50 @@ public abstract class AbstractPaginatedMenuBuilder<T extends AbstractPaginatedMe
     }
 
     /**
+     * @deprecated use {@link #getNextButtonSlots()} instead
      * Gets the slot index for the next page button.
      *
      * @return next page slot index
      */
+    @Deprecated
     public int getNextButtonSlot() {
+        return nextButtonSlot.getFirst();
+    }
+
+    /**
+     * Gets the slot index for the next page button.
+     *
+     * @return next page slot index
+     */
+    public List<Integer> getNextButtonSlots() {
         return nextButtonSlot;
     }
 
     /**
+     * @deprecated use {@link #nextButtonSlots(Integer...)} instead
      * Sets the slot index for the next page button.
      *
      * @param nextButtonSlot slot index
      * @return fluent pattern
      */
+    @Deprecated
     public T nextButtonSlot(int nextButtonSlot) {
-        this.nextButtonSlot = nextButtonSlot;
+        this.nextButtonSlot = List.of(nextButtonSlot);
         return (T) this;
     }
+
+    /**
+     * Sets the slot index for the next page button.
+     *
+     * @param nextButtonSlots slot index
+     * @return fluent pattern
+     */
+    public T nextButtonSlots(Integer... nextButtonSlots) {
+        this.nextButtonSlot = List.of(nextButtonSlots);
+        return (T) this;
+    }
+
+
 
     /**
      * Sets the slot index for the next page button.
@@ -301,8 +352,13 @@ public abstract class AbstractPaginatedMenuBuilder<T extends AbstractPaginatedMe
         for (int i = 1 ; i < pages.size() ; i++) {
             Menu page = pages.get(i);
             Menu prev = pages.get(i - 1);
-            setPaginationIcon(prev, nextButtonSlot, nextButton, (p, c) -> page.open(p));
-            setPaginationIcon(page, previousButtonSlot, previousButton, (p, c) -> prev.open(p));
+            //TODO
+            nextButtonSlot.forEach(nextIndex -> {
+                setPaginationIcon(prev, nextIndex, nextButton, (p, c) -> page.open(p));
+            });
+            previousButtonSlot.forEach(prevIndex -> {
+                setPaginationIcon(page, prevIndex, previousButton, (p, c) -> prev.open(p));
+            });
         }
     }
 

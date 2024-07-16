@@ -141,8 +141,12 @@ public class PaginatedMenuBuilder extends AbstractPaginatedMenuBuilder<Paginated
                 }
             }
             List<Integer> validSlots = getValidSlots(page);
-            setPaginationIcon(page, getPreviousButtonSlot(), getPreviousButtonEmpty());
-            setPaginationIcon(page, getNextButtonSlot(), getNextButtonEmpty());
+            getPreviousButtonSlots().forEach(prevIndex -> {
+                setPaginationIcon(page, prevIndex, getPreviousButtonEmpty());
+            });
+            getNextButtonSlots().forEach(nextIndex -> {
+                setPaginationIcon(page, nextIndex, getNextButtonEmpty());
+            });
             Iterator<Integer> slotIterator = validSlots.iterator();
             while (!items.isEmpty() && slotIterator.hasNext()) {
                 int slotIndex = slotIterator.next();
