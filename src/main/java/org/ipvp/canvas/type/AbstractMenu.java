@@ -138,6 +138,11 @@ public abstract class AbstractMenu implements Menu  {
         }
     }
 
+    @Override
+    public void title(Component title) {
+        this.inventoryTitle = title;
+    }
+
     private Inventory createInventory(InventoryHolder holder) {
         return inventoryType == null
                 ? Bukkit.createInventory(holder, inventorySlots, inventoryTitle)

@@ -98,6 +98,8 @@ public interface Menu extends Iterable<Slot> {
      */
     void open(Player viewer);
 
+    void title(Component title);
+
     /**
      * Closes the menu for all viewers.
      *
