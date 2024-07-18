@@ -161,6 +161,7 @@ public class PaginatedMenuBuilder extends AbstractPaginatedMenuBuilder<Paginated
         } while (!items.isEmpty());
 
         linkPages(pages);
+        setPageTitles(pages);
         return pages;
     }
 

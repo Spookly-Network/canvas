@@ -30,10 +30,7 @@ import org.ipvp.canvas.slot.Slot;
 import org.ipvp.canvas.template.ItemStackTemplate;
 import org.ipvp.canvas.template.StaticItemTemplate;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -50,6 +47,7 @@ public abstract class AbstractPaginatedMenuBuilder<T extends AbstractPaginatedMe
     private ItemStackTemplate previousButtonEmpty;
     private ItemStackTemplate nextButton;
     private ItemStackTemplate nextButtonEmpty;
+    private PaginatedMenuTitles menuTitles;
 
     public AbstractPaginatedMenuBuilder(Menu.Builder<?> pageBuilder) {
         this.pageBuilder = pageBuilder;
@@ -343,6 +341,11 @@ public abstract class AbstractPaginatedMenuBuilder<T extends AbstractPaginatedMe
         return (T) this;
     }
 
+    public T paginateMenuTitles(PaginatedMenuTitles menuTitles) {
+        this.menuTitles = menuTitles;
+        return (T) this;
+    }
+
     /**
      * Internal helper method to link any generated pages.
      *
@@ -359,6 +362,38 @@ public abstract class AbstractPaginatedMenuBuilder<T extends AbstractPaginatedMe
             previousButtonSlot.forEach(prevIndex -> {
                 setPaginationIcon(page, prevIndex, previousButton, (p, c) -> prev.open(p));
             });
+        }
+    }
+
+
+    /**
+     * Internal helper method to title any generated pages.
+     *
+     * @param pages pages to title
+     */
+    void setPageTitles(List<Menu> pages) {
+        if (this.menuTitles != null) {
+            if (pages.size() <= 1) {
+                pages.getFirst().title(this.menuTitles.getNoPages());
+                return;
+            }
+
+            ListIterator<Menu> iterator = pages.listIterator();
+            while (iterator.hasNext()) {
+                Menu page = iterator.next();
+                if (iterator.hasPrevious() && iterator.hasNext()) {
+                    page.title(this.menuTitles.getPages());
+                    return;
+                }
+                if (!iterator.hasPrevious()) {
+                    page.title(this.menuTitles.getFirstPage());
+                    return;
+                }
+                if (!iterator.hasNext()) {
+                    page.title(this.menuTitles.getLastPage());
+                    return;
+                }
+            }
         }
     }
 
