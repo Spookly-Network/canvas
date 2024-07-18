@@ -6,7 +6,7 @@
 
     <groupId>org.ipvp</groupId>
     <artifactId>canvas</artifactId>
-    <version>1.7.2</version>
+    <version>1.7.3</version>
     <description>Easily manage Bukkit inventory functions</description>
 
     <properties>
