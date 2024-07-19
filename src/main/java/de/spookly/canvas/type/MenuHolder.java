@@ -1,6 +1,5 @@
 /*
  * Copyright (C) Matthew Steglinski (SainttX) <matt@ipvp.org>
- * Copyright (C) Niklas Ehlen (spookly) (only on added/edited api)
  * Copyright (C) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,3 +20,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+package de.spookly.canvas.type;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import de.spookly.canvas.Menu;
+
+import java.util.Objects;
+
+public class MenuHolder implements InventoryHolder {
+
+    private Player viewer;
+    private Menu menu;
+    private Inventory inventory;
+
+    MenuHolder(Player viewer, Menu menu) {
+        this(viewer, menu, null);
+    }
+
+    MenuHolder(Player viewer, Menu menu, Inventory inventory) {
+        this.viewer = viewer;
+        this.menu = menu;
+        this.inventory = inventory;
+    }
+
+    public Player getViewer() {
+        return viewer;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    void setMenu(Menu menu) {
+        Objects.requireNonNull(menu);
+        this.menu = menu;
+    }
+
+    @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    void setInventory(Inventory inventory) {
+        Objects.requireNonNull(inventory);
+        this.inventory = inventory;
+    }
+}

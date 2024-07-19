@@ -1,6 +1,5 @@
 /*
  * Copyright (C) Matthew Steglinski (SainttX) <matt@ipvp.org>
- * Copyright (C) Niklas Ehlen (spookly) (only on added/edited api)
  * Copyright (C) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,3 +20,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+package de.spookly.canvas;
+
+import java.util.Iterator;
+
+public class ArrayIterator<T> implements Iterator<T> {
+
+    private T[] array;
+    private int current;
+
+    public ArrayIterator(T[] array) {
+        this.array = array;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return array.length > current;
+    }
+
+    @Override
+    public T next() {
+        return array[current++];
+    }
+}

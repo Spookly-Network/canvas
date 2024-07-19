@@ -1,7 +1,13 @@
 # canvas 
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+![Maven metadata URL](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fmvn.spookly.net%2Fsnapshots%2Fde%2Fspookly%2Fcanvas%2Fmaven-metadata.xml&versionSuffix=SNAPSHOT&label=development%20version)
+[![Discord](https://img.shields.io/discord/900708000900194314)](https://discord.gg/9bpxXyszCb)
+
 > [!IMPORTANT]  
 > This is a fork of another repository, we have just customized it to our needs.
 > So please for any bugfixes, other contributions or props please see the original repo.
+> 
+> We also changed the group to resolve conflicts with original, when using our mvn repo.
 > 
 > Link to original: [https://github.com/IPVP-MC/canvas](https://github.com/IPVP-MC/canvas)
 
@@ -21,32 +27,44 @@ A highly advanced and effective inventory management library for Bukkit plugins.
 
 ## Using canvas
 
-canvas is integrated into plugins through the use of Maven.
+canvas is integrated into plugins through the use of Maven / Gradle .
 
 #### Requirements
-* [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-* [Maven 3](http://maven.apache.org/download.html)
+* [Java 21](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* [Gradle 8.8](https://gradle.org/releases/)
 * [Git](https://git-scm.com/downloads)
-* Spigot 1.8.8 or newer
-
-Then use the following command to install canvas to your local maven repository
-```
-git clone https://github.com/IPVP-MC/canvas.git
-cd canvas/
-mvn clean install
-```
+* Papermc 1.21
 
 You will now be able to add canvas as a dependency in your pom.xml files with the following
+
+**Maven:**
 ```xml
+<repository>
+  <id>spookly-repository-snapshots</id>
+  <name>Spookly Repository</name>
+  <url>https://mvn.spookly.net/(releases | snapshots)</url>
+</repository>
+
 <dependency>
-    <groupId>org.ipvp</groupId>
-    <artifactId>canvas</artifactId>
-    <version>1.7.0-SNAPSHOT</version>
-    <scope>compile</scope>
+  <groupId>de.spookly</groupId>
+  <artifactId>canvas</artifactId>
+  <version>1.7.4</version>
 </dependency>
 ```
 
-**Note**: You will need to use the Maven shade plugin in order to package your final `.jar` file. Add the following to your maven plugins section:
+**Gradle:**
+```groovy
+maven {
+  name "spooklyRepositorySnapshots"
+  url "https://mvn.spookly.net/(releases | snapshots)"
+}
+
+implementation "de.spookly:SpooklyCoreAPI:1.1.0-SNAPSHOT"
+```
+
+**Note**: You will need to use the Maven shade / Gradle shadow plugin in order to package your final `.jar` file. Add the following to your maven plugins section:
+
+**Maven:**
 ```
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
@@ -62,7 +80,13 @@ You will now be able to add canvas as a dependency in your pom.xml files with th
     </executions>
 </plugin>   
 ```
-see [here](https://maven.apache.org/plugins/maven-shade-plugin/) for additional documentation on the shade plugin.
+**Gradle:**
+```groovy
+plugins {
+  id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+```
+see [here for maven](https://maven.apache.org/plugins/maven-shade-plugin/) or [here for gradle](https://github.com/johnrengelman/shadow) for additional documentation on the shade plugin.
 
 Once the dependency is registered, the only thing left to do is to register the [MenuFunctionListener](src/main/java/org/ipvp/canvas/MenuFunctionListener.java) with the Bukkit event dispatcher.
 
@@ -125,12 +149,12 @@ be opened for the player, resetting their cursor.
 
 #### Pagination
 Creating connected pages of Menus to display a catalog of items is made easy with the 
-[PaginatedMenuBuilder](src/main/java/org/ipvp/canvas/paginate/PaginatedMenuBuilder.java) class. The utility is able to be
+[PaginatedMenuBuilder](src/main/java/de/spookly/canvas/paginate/PaginatedMenuBuilder.java) class. The utility is able to be
 configured to set the proper previous and next page icons, and any necessary functions for items that are added.
 
 In the basic example below, we create a simple menu displaying various static items.
 ```java
-Menu.Builder pageTemplate = ChestMenu.builder(3).title("Items").redraw(true);
+Menu.Builder pageTemplate = ChestMenu.builder(3).title(Component.text("Items")).redraw(true);
 Mask itemSlots = BinaryMask.builder(pageTemplate.getDimensions())
         .pattern("011111110").build();
 List<Menu> pages = PaginatedMenuBuilder.builder(pageTemplate)
@@ -159,12 +183,12 @@ A [Slot](src/main/java/org/ipvp/canvas/slot/Slot.java) is exactly what you'd exp
 incredible customization of what they can do. Menus grant access to their slots through the `Menu#getSlot(int)` method.
 
 There are 3 major pieces to Slot functionality:
-* [ClickOptions](src/main/java/org/ipvp/canvas/slot/ClickOptions.java)
-* [ClickInformation](src/main/java/org/ipvp/canvas/ClickInformation.java)
-* [ClickHandler](src/main/java/org/ipvp/canvas/slot/Slot.java)
+* [ClickOptions](src/main/java/de/spookly/canvas/slot/ClickOptions.java)
+* [ClickInformation](src/main/java/de/spookly/canvas/ClickInformation.java)
+* [ClickHandler](src/main/java/de/spookly/canvas/slot/Slot.java)
 
 Additionally, Slots grant the ability to render non-static items within their parent Menu via 
-[ItemStackTemplate](src/main/java/org/ipvp/canvas/template/ItemStackTemplate.java) (see below).
+[ItemStackTemplate](src/main/java/de/spookly/canvas/template/ItemStackTemplate.java) (see below).
 
 #### ClickOptions
 Click options are the primary method of controlling what actions and click types can be performed on the raw item contents of the holding inventory. Two basic sets are provided with the library, which are `ClickOptions.ALLOW_ALL` and `ClickOptions.DENY_ALL`. By default, slots carry the DENY_ALL trait, denying all pickup and dropping off of items in the respective inventory. These behaviors are easily modified with the `Slot#setClickOptions(ClickOptions)` method.
@@ -182,7 +206,7 @@ public void addClickOptions(Slot slot) {
 ```
 
 #### ClickInformation
-[ClickInformation](src/main/java/org/ipvp/canvas/ClickInformation.java) is a class constructed to provide the ClickHandler of a Slot with all available information about a click performed on the Slot. Also available is the possibility to change the resulting outcome of the click (whether interaction in the raw inventory occurs).
+[ClickInformation](src/main/java/de/spookly/canvas/ClickInformation.java) is a class constructed to provide the ClickHandler of a Slot with all available information about a click performed on the Slot. Also available is the possibility to change the resulting outcome of the click (whether interaction in the raw inventory occurs).
 
 #### ClickHandler
 Click handlers are where most of the logic of a slot will occur. As a slot is clicked, the click handler (if present) is triggered with information about who clicked as well as the click performed. The handler of a slot will always be triggered, regardless of whether or not the options of a slot forbid interaction with it. Keep in mind that the result of the click will be set by the options before the handler is triggered and as such the ClickInformation will represent this result.
@@ -254,7 +278,7 @@ Finding it would be a nuisance! For your benefit (or not) we've purposely exclud
 so that our inventory would have a gaping hole, feel free to see how long it would take to find the missing number.
 
 Here is where Masks come in play. For the above inventory, masking the slots is made simple using a 
-[BinaryMask](src/main/java/org/ipvp/canvas/mask/BinaryMask.java).
+[BinaryMask](src/main/java/de/spookly/canvas/mask/BinaryMask.java).
 
 ```java
 public void addWhiteBorder(Inventory inventory) {
@@ -269,7 +293,7 @@ public void addWhiteBorder(Inventory inventory) {
 ```
 
 Masks provide an incredibly simple interface for labelling slots. In the case of 
-[BinaryMask](src/main/java/org/ipvp/canvas/mask/BinaryMask.java), each character represents a boolean value of whether or 
+[BinaryMask](src/main/java/de/spookly/canvas/mask/BinaryMask.java), each character represents a boolean value of whether or 
 not the slot should be selected. A character value of '1' represents yes and all other characters the opposite. 
 This model provides a semi-visual view of what the inventory will look like and is easy to add or remove specific slots.
 
@@ -278,7 +302,7 @@ The final product we end up with is:
 ![](http://i.imgur.com/BHt65l6.png)
 
 #### Recipe Masks
-A [RecipeMask](src/main/java/org/ipvp/canvas/mask/RecipeMask.java) is another abstraction of mask which enabled assigning
+A [RecipeMask](src/main/java/de/spookly/canvas/mask/RecipeMask.java) is another abstraction of mask which enabled assigning
 multiple types of items to slots. In the above image suppose we want every second item to be a red stained glass pane, we
 could use a RecipeMask in the following way:
 ```java

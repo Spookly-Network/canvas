@@ -1,6 +1,5 @@
 /*
  * Copyright (C) Matthew Steglinski (SainttX) <matt@ipvp.org>
- * Copyright (C) Niklas Ehlen (spookly) (only on added/edited api)
  * Copyright (C) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,3 +20,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+package de.spookly.canvas.template;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+/**
+ * An item that can be re-rendered as needed for specific players.
+ */
+@FunctionalInterface
+public interface ItemStackTemplate {
+
+    /**
+     * Gets the item for a player.
+     *
+     * @param player player
+     * @return current item the player can see
+     */
+    ItemStack getItem(Player player);
+}

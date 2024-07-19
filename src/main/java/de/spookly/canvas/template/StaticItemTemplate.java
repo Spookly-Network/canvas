@@ -1,6 +1,5 @@
 /*
  * Copyright (C) Matthew Steglinski (SainttX) <matt@ipvp.org>
- * Copyright (C) Niklas Ehlen (spookly) (only on added/edited api)
  * Copyright (C) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,3 +20,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+package de.spookly.canvas.template;
+
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.Objects;
+
+/**
+ * An itemstack template that will always return the same item.
+ */
+public class StaticItemTemplate implements ItemStackTemplate {
+
+    private final ItemStack item;
+
+    public StaticItemTemplate(ItemStack item) {
+        this.item = item;
+    }
+
+    /**
+     * Gets the item contained by this static template.
+     *
+     * @return item
+     */
+    public ItemStack getItem() {
+        return item == null ? null : new ItemStack(item);
+    }
+
+    @Override
+    public ItemStack getItem(Player player) {
+        return getItem();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StaticItemTemplate that = (StaticItemTemplate) o;
+        return Objects.equals(item, that.item);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(item);
+    }
+}

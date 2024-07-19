@@ -1,6 +1,5 @@
 /*
  * Copyright (C) Matthew Steglinski (SainttX) <matt@ipvp.org>
- * Copyright (C) Niklas Ehlen (spookly) (only on added/edited api)
  * Copyright (C) contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,3 +20,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+package de.spookly.canvas.type;
+
+import net.kyori.adventure.text.Component;
+import org.bukkit.event.inventory.InventoryType;
+import de.spookly.canvas.Menu;
+
+/**
+ * A menu backed by a Hopper Inventory.
+ */
+public class HopperMenu extends AbstractMenu {
+
+    protected HopperMenu(Component title, Menu menu, boolean redraw) {
+        super(title, InventoryType.HOPPER, menu, redraw);
+    }
+
+    /**
+     * Returns a new builder. The Menu generated will be backed by a Hopper inventory.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    @Override
+    public Dimension getDimensions() {
+        return new Dimension(1, 5);
+    }
+
+    /**
+     * A builder for creating a BoxMenu instance.
+     */
+    public static class Builder extends AbstractMenu.Builder<Builder> {
+
+        public Builder() {
+            super(new Dimension(1, 5));
+        }
+
+        @Override
+        public HopperMenu build() {
+            return new HopperMenu(getTitle(), getParent(), isRedraw());
+        }
+    }
+}
